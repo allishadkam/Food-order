@@ -18,6 +18,15 @@ const {items}=cartCTX;
       return;
     }
     setbtnIsHighlighted(true)
+
+
+   const timer= setTimeout(()=>{
+      setbtnIsHighlighted(false);
+    },300)
+
+    return ()=>{
+      clearTimeout(timer);
+    }
   },[items])
 
 
