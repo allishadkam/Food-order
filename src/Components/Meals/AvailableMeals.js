@@ -7,13 +7,14 @@ import { useEffect, useState } from 'react';
 const AvailableMeals = () => {
 
   const[mealsList,setmealList]=useState([]);
+  const[isLoading,setisLoading]=useState(true);
 
   useEffect(()=>{
 
     const fetchdata = async()=>{
     const response= await fetch("https://http-test-5cfcc-default-rtdb.firebaseio.com/meals.json");
     const data=await response.json();
-      console.log(response)
+    
     const meals=[];
 
     for(const key in data){
@@ -23,13 +24,11 @@ const AvailableMeals = () => {
         description:data[key].description,
         name:data[key].name
       })
-      
     };
-    setmealList(meals)
+    setmealList(meals);
+    setisLoading(false);
     };
-    fetchdata();
-    console.log(mealsList)
-    
+    fetchdata(); 
   },[])
   
   const rendermeals = mealsList.map((meal) => <MealItem id={meal.id} key={meal.id} price={meal.price} description={meal.description} name={meal.name}/>);
@@ -37,7 +36,7 @@ const AvailableMeals = () => {
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{rendermeals}</ul>
+        {isLoading?<p>loading...</p>:<ul>{rendermeals}</ul>}
       </Card>
       
     </section>
