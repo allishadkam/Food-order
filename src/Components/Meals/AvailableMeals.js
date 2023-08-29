@@ -1,17 +1,43 @@
 import classes from './AvailableMeals.module.css';
 import Card from '../UI/Card';
 import MealItem from './MealItem';
+import { useEffect, useState } from 'react';
 
 
 const AvailableMeals = () => {
 
-  console.log("component runs")
-  const mealsList =[] /*DUMMY_MEALS.map((meal) => <MealItem id={meal.id} key={meal.id} price={meal.price} description={meal.description} name={meal.name}/>);*/
+  const[mealsList,setmealList]=useState([]);
+
+  useEffect(()=>{
+
+    const fetchdata = async()=>{
+    const response= await fetch("https://http-test-5cfcc-default-rtdb.firebaseio.com/meals.json");
+    const data=await response.json();
+      console.log(response)
+    const meals=[];
+
+    for(const key in data){
+      meals.push({
+        id:key,
+        price:data[key].price,
+        description:data[key].description,
+        name:data[key].name
+      })
+      
+    };
+    setmealList(meals)
+    };
+    fetchdata();
+    console.log(mealsList)
+    
+  },[])
+  
+  const rendermeals = mealsList.map((meal) => <MealItem id={meal.id} key={meal.id} price={meal.price} description={meal.description} name={meal.name}/>);
 
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+        <ul>{rendermeals}</ul>
       </Card>
       
     </section>
