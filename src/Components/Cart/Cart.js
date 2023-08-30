@@ -49,6 +49,18 @@ const Cart = (props) => {
   {hasItems && <button className={classes.button} onClick={orderHandler}>Order</button>}
 </div>
 
+
+const onConfirm=(userData)=>{
+  fetch("https://http-test-5cfcc-default-rtdb.firebaseio.com/orders.json",{
+    method:"POST",
+    body: JSON.stringify({
+      user:userData,
+      meals:cartCtx.items
+    })
+    
+  })
+}
+
   return (
     <Modal onClose={props.onClose}>
       {cartItems}
@@ -56,7 +68,7 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {ischeckdout&&<Checkout onCancel={props.onClose}/>}
+      {ischeckdout&&<Checkout onConfirm={onConfirm} onCancel={props.onClose}/>}
       {!ischeckdout&&buttons}
       
     </Modal>
